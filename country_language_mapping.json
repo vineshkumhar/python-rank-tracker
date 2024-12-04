@@ -1,0 +1,183 @@
+{
+    "United States": {
+        "English": "en",
+        "Spanish": "es"
+    },
+    "United Kingdom": {
+        "English": "en"
+    },
+    "Canada": {
+        "English": "en",
+        "French": "fr"
+    },
+    "Australia": {
+        "English": "en"
+    },
+    "New Zealand": {
+        "English": "en"
+    },
+    "Germany": {
+        "German": "de"
+    },
+    "Netherlands": {
+        "Dutch": "nl"
+    },
+    "Ireland": {
+        "English": "en",
+        "Irish": "ga"
+    },
+    "South Africa": {
+        "Afrikaans": "af",
+        "English": "en",
+        "Zulu": "zu",
+        "Xhosa": "xh",
+        "Sesotho": "st"
+    },
+    "Singapore": {
+        "English": "en",
+        "Mandarin": "zh",
+        "Tamil": "ta",
+        "Malay": "ms"
+    },
+    "France": {
+        "French": "fr"
+    },
+    "Italy": {
+        "Italian": "it"
+    },
+    "Spain": {
+        "Spanish": "es"
+    },
+    "India": {
+        "English": "en",
+        "Hindi": "hi",
+        "Tamil": "ta",
+        "Bengali": "bn",
+        "Telugu": "te"
+    },
+    "China": {
+        "Simplified Chinese": "zh-CN",
+        "Traditional Chinese": "zh-TW"
+    },
+    "Russia": {
+        "Russian": "ru"
+    },
+    "Brazil": {
+        "Portuguese": "pt"
+    },
+    "Mexico": {
+        "Spanish": "es"
+    },
+    "Japan": {
+        "Japanese": "ja"
+    },
+    "South Korea": {
+        "Korean": "ko"
+    },
+    "Saudi Arabia": {
+        "Arabic": "ar"
+    },
+    "United Arab Emirates": {
+        "Arabic": "ar",
+        "English": "en",
+        "Persian": "fa",
+        "Hindi": "hi",
+        "Urdu": "ur"
+    },
+    "Argentina": {
+        "Spanish": "es"
+    },
+    "Nigeria": {
+        "English": "en",
+        "Hausa": "ha",
+        "Igbo": "ig",
+        "Yoruba": "yo"
+    },
+    "Egypt": {
+        "Arabic": "ar"
+    },
+    "Pakistan": {
+        "Urdu": "ur",
+        "English": "en"
+    },
+    "Afghanistan": {
+        "Dari": "fa",
+        "Pashto": "ps"
+    },
+    "Algeria": {
+        "Arabic": "ar",
+        "French": "fr"
+    },
+    "Bosnia and Herzegovina": {
+        "Bosnian": "bs",
+        "Croatian": "hr",
+        "Serbian": "sr"
+    },
+    "Bangladesh": {
+        "Bengali": "bn",
+        "English": "en"
+    },
+    "Belgium": {
+        "Dutch": "nl",
+        "French": "fr",
+        "German": "de"
+    },
+    "Colombia": {
+        "Spanish": "es"
+    },
+    "Chile": {
+        "Spanish": "es"
+    },
+    "Indonesia": {
+        "Indonesian": "id"
+    },
+    "Iraq": {
+        "Arabic": "ar",
+        "Kurdish": "ku"
+    },
+    "Israel": {
+        "Hebrew": "he",
+        "Arabic": "ar"
+    },
+    "Jordan": {
+        "Arabic": "ar"
+    },
+    "Kazakhstan": {
+        "Kazakh": "kk",
+        "Russian": "ru"
+    },
+    "Kenya": {
+        "English": "en",
+        "Swahili": "sw"
+    },
+    "Kuwait": {
+        "Arabic": "ar"
+    },
+    "Lebanon": {
+        "Arabic": "ar",
+        "French": "fr"
+    },
+    "Morocco": {
+        "Arabic": "ar",
+        "French": "fr"
+    },
+    "Philippines": {
+        "Filipino": "tl",
+        "English": "en"
+    },
+    "Poland": {
+        "Polish": "pl"
+    },
+    "Portugal": {
+        "Portuguese": "pt"
+    },
+    "Romania": {
+        "Romanian": "ro"
+    },
+    "Sweden": {
+        "Swedish": "sv"
+    },
+    "Turkey": {
+        "Turkish": "tr"
+    }
+}
