@@ -253,7 +253,7 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
                     break
 
                 start = page * results_per_page
-                google_url = f"https://www.{tld}/search?q={encoded_query}&gl={country}&hl={language}&uule={uule}&start={start}&pws=0"
+                google_url = f"https://www.{tld}/search?q={encoded_query}&gl={country}&hl={language}&start={start}&pws=0&uule={uule}"
 
                 # Inform the user about the selected country for the search
                 st.write(f"Using location for search: {location_to_mimic}")
