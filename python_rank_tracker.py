@@ -358,7 +358,7 @@ if __name__ == "__main__":
 
     def is_valid_url_or_domain(input_string):
         url_regex = re.compile(
-            r'^(https?://)?(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,}(/.*)?$',
+            r'^(https?://)?([a-z0-9-]+\.)+[a-z]{2,}(/.*)?$',
             re.IGNORECASE
         )
         return re.match(url_regex, input_string) is not None
@@ -380,13 +380,17 @@ if __name__ == "__main__":
 
     if task_type == "Rank Tracker":
         domain_or_url_to_find = st.text_input("Enter the domain or URL you want to track:", "")
+
         if domain_or_url_to_find.strip() == "":
             st.error("Domain or URL is mandatory for the Rank Tracker.")
             stop_on_domain_found = False
+
         elif not is_valid_url_or_domain(domain_or_url_to_find):
             st.error("Please enter a valid domain name or URL.")
             stop_on_domain_found = False
+
         else:
+            st.success("Valid domain or URL entered.")
             stop_on_domain_found = True
     else:
         domain_or_url_to_find = ""
