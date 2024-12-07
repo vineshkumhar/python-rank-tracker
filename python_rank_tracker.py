@@ -29,6 +29,20 @@ html_directory = "saved_serp_html"
 if not os.path.exists(html_directory):
     os.makedirs(html_directory)
 
+# Function to get IP address and geolocation
+def get_ip_and_geolocation():
+    try:
+        ip_info = requests.get("https://ipinfo.io/json").json()
+        ip_address = ip_info.get("ip")
+        geolocation = ip_info.get("loc")  # Latitude and Longitude
+        city = ip_info.get("city")
+        region = ip_info.get("region")
+        country = ip_info.get("country")
+        return ip_address, geolocation, city, region, country
+    except Exception as e:
+        st.error(f"Could not fetch IP information: {e}")
+        return None, None, None, None, None
+
 # Function to extract mobile snippet results
 def extract_mobile_snippet_results(soup, query, domain_to_find):
     snippet_type = None
@@ -295,6 +309,15 @@ def zip_saved_html_files(directory):
 if __name__ == "__main__":
     st.title("Google Search Scraper & Rank Tracker")
 
+    # Get user IP and geolocation
+    ip_address, geolocation, city, region, country = get_ip_and_geolocation()
+
+    # Display user IP and geolocation information
+    if ip_address:
+        st.write(f"Your IP Address: {ip_address}")
+        st.write(f"Geolocation: {geolocation}")
+        st.write(f"City: {city}, Region: {region}, Country: {country}")
+
     with open("country_codes.json", "r", encoding="utf-8") as f:
         countries = json.load(f)
 
@@ -305,11 +328,12 @@ if __name__ == "__main__":
 
     def is_valid_url_or_domain(input_string):
         url_regex = re.compile(
-            r'^(https?://)?(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}(/.*)?$',
+            r'^(https?://)?(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,}(/.*)?$',
             re.IGNORECASE
         )
         return re.match(url_regex, input_string) is not None
 
+    tld = st.text_input("Enter Google Domain (e.g., google.com):", "google.com")
     selected_country = st.selectbox("Select a country:", list(countries.keys()))
     country_code = countries[selected_country]
     available_languages = country_language_mapping.get(selected_country, {"English": "en"})
