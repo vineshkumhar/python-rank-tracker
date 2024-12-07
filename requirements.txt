@@ -58,3 +58,4 @@ watchdog==5.0.3
 websocket-client==1.8.0
 wsproto==1.2.0
 xlsxwriter==3.1.5
+pip install geopy==2.3.0
