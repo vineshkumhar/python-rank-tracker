@@ -310,7 +310,6 @@ if __name__ == "__main__":
         )
         return re.match(url_regex, input_string) is not None
 
-    tld = st.text_input("Enter Google Domain (e.g., google.com):", "google.com")
     selected_country = st.selectbox("Select a country:", list(countries.keys()))
     country_code = countries[selected_country]
     available_languages = country_language_mapping.get(selected_country, {"English": "en"})
