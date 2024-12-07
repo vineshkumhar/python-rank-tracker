@@ -234,7 +234,7 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
     query_positions = {query: 0 for query in queries}
 
     # Specify location to mimic (e.g., Dubai, UAE)
-    location_to_mimic = "India"  # Change this to the desired location
+    location_to_mimic = "UAE"  # Change this to the desired location
     coordinates = get_coordinates(location_to_mimic)
 
     if coordinates:
