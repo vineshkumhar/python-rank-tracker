@@ -10,6 +10,7 @@ import os
 import json
 import io
 import re
+import base64
 
 # List of user agents for random selection (for mobile and desktop)
 mobile_user_agents = [
@@ -205,7 +206,13 @@ def extract_organic_results_desktop(soup, query, domain_to_find, position):
 
     return results_list, position
 
-# Updated search_google function to handle positions correctly
+# Function to encode the location for the uule parameter
+def encode_location_for_uule(location):
+    # Base64 encoding of the location
+    encoded_location = base64.urlsafe_b64encode(location.encode()).decode()
+    return encoded_location
+
+# Updated search_google function to include the uule parameter
 def search_google(tld, country, language, results_per_page, queries, domain_to_find, save_html=False, stop_on_domain_found=False, device_type="desktop", max_pages=5):
     results_list = []
     results_df = pd.DataFrame()
@@ -215,6 +222,10 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
     
     # Dictionary to keep track of position for each query
     query_positions = {query: 0 for query in queries}
+
+    # Specify location to mimic (e.g., Dubai, UAE)
+    location_to_mimic = "Dubai, UAE"  # Change this to the desired location
+    uule = encode_location_for_uule(location_to_mimic)
 
     for query in queries:
         st.write(f"Searching for: {query.strip()}")
@@ -226,10 +237,10 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
                 break
 
             start = page * results_per_page
-            google_url = f"https://www.{tld}/search?q={encoded_query}&gl={country}&hl={language}&start={start}&pws=0"
+            google_url = f"https://www.{tld}/search?q={encoded_query}&gl={country}&hl={language}&uule={uule}&start={start}&pws=0"
 
             # Inform the user about the selected country for the search
-            st.write(f"Using geolocation for country: {country} ({selected_country})")
+            st.write(f"Using location for search: {location_to_mimic}")
 
             attempts = 0
             delay = 5
