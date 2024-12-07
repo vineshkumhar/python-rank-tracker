@@ -214,7 +214,7 @@ def encode_location_for_uule(location):
 
 # Function to get coordinates for a location using geocoding
 def get_coordinates(location):
-    geolocator = Nominatim(user_agent="geoapiExercises")
+    geolocator = Nominatim(user_agent="your_app_name")  # Specify a user agent
     location_obj = geolocator.geocode(location)
     if location_obj:
         return (location_obj.latitude, location_obj.longitude)
