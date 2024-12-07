@@ -1,3 +1,4 @@
+import base64
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -10,7 +11,7 @@ import os
 import json
 import io
 import re
-import base64
+from geopy.geocoders import Nominatim
 
 # List of user agents for random selection (for mobile and desktop)
 mobile_user_agents = [
@@ -208,11 +209,20 @@ def extract_organic_results_desktop(soup, query, domain_to_find, position):
 
 # Function to encode the location for the uule parameter
 def encode_location_for_uule(location):
-    # Base64 encoding of the location
     encoded_location = base64.urlsafe_b64encode(location.encode()).decode()
     return encoded_location
 
-# Updated search_google function to include the uule parameter
+# Function to get coordinates for a location using geocoding
+def get_coordinates(location):
+    geolocator = Nominatim(user_agent="geoapiExercises")
+    location_obj = geolocator.geocode(location)
+    if location_obj:
+        return (location_obj.latitude, location_obj.longitude)
+    else:
+        st.error(f"Could not geocode the location: {location}")
+        return None
+
+# Function to search Google with the uule parameter
 def search_google(tld, country, language, results_per_page, queries, domain_to_find, save_html=False, stop_on_domain_found=False, device_type="desktop", max_pages=5):
     results_list = []
     results_df = pd.DataFrame()
@@ -225,77 +235,83 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
 
     # Specify location to mimic (e.g., Dubai, UAE)
     location_to_mimic = "Dubai, UAE"  # Change this to the desired location
-    uule = encode_location_for_uule(location_to_mimic)
+    coordinates = get_coordinates(location_to_mimic)
 
-    for query in queries:
-        st.write(f"Searching for: {query.strip()}")
-        encoded_query = quote_plus(query.strip())
-        domain_found_in_query = False
+    if coordinates:
+        latitude, longitude = coordinates
+        # Create a location string for uule
+        location_string = f"ll={latitude},{longitude}"
+        uule = encode_location_for_uule(location_string)
 
-        for page in range(max_pages):
-            if stop_on_domain_found and domain_found_in_query:
-                break
+        for query in queries:
+            st.write(f"Searching for: {query.strip()}")
+            encoded_query = quote_plus(query.strip())
+            domain_found_in_query = False
 
-            start = page * results_per_page
-            google_url = f"https://www.{tld}/search?q={encoded_query}&gl={country}&hl={language}&uule={uule}&start={start}&pws=0"
-
-            # Inform the user about the selected country for the search
-            st.write(f"Using location for search: {location_to_mimic}")
-
-            attempts = 0
-            delay = 5
-
-            while attempts < 3:
-                try:
-                    headers = {
-                        "User-Agent": random.choice(user_agents),
-                        "Viewport": viewport
-                    }
-                    response = requests.get(google_url, headers=headers)
-
-                    if response.status_code == 429:
-                        st.warning("Too many requests. Pausing for a few seconds before retrying.")
-                        sleep(delay)
-                        attempts += 1
-                        continue
-
-                    response.raise_for_status()
-
-                    if save_html:
-                        html_path = os.path.join(html_directory, f"{query.strip().replace(' ', '_')}_SERP_{device_type}_page_{page}.html")
-                        with open(html_path, "w", encoding="utf-8") as f:
-                            f.write(response.text)
-                        st.write(f"SERP HTML saved at: {html_path}")
-
-                    soup = BeautifulSoup(response.text, "html.parser")
-
-                    # Extract results based on device type
-                    if device_type == "mobile":
-                        page_results, position = extract_mobile_snippet_results(soup, query, domain_to_find)
-                        page_results += extract_organic_results_mobile(soup, query, domain_to_find, position)
-                    else:
-                        page_results, position = extract_results_from_desktop(soup, query, domain_to_find)
-
-                    # Correctly update positions for results
-                    for result in page_results:
-                        result['Position'] = query_positions[query] + 1  # Start position for this page
-                        query_positions[query] += 1  # Increment position for each result
-
-                    results_list.extend(page_results)
-
-                    if stop_on_domain_found and any(result["Domain Found"] == "Yes" for result in page_results):
-                        domain_found_in_query = True
-                        break
-
-                    st.write(f"Google Search URL: {google_url}")
-
-                    sleep(5)
+            for page in range(max_pages):
+                if stop_on_domain_found and domain_found_in_query:
                     break
 
-                except requests.exceptions.RequestException as e:
-                    st.error(f"Request error: {e}")
-                    attempts += 1
-                    sleep(5)
+                start = page * results_per_page
+                google_url = f"https://www.{tld}/search?q={encoded_query}&gl={country}&hl={language}&uule={uule}&start={start}&pws=0"
+
+                # Inform the user about the selected country for the search
+                st.write(f"Using location for search: {location_to_mimic}")
+
+                attempts = 0
+                delay = 5
+
+                while attempts < 3:
+                    try:
+                        headers = {
+                            "User-Agent": random.choice(user_agents),
+                            "Viewport": viewport
+                        }
+                        response = requests.get(google_url, headers=headers)
+
+                        if response.status_code == 429:
+                            st.warning("Too many requests. Pausing for a few seconds before retrying.")
+                            sleep(delay)
+                            attempts += 1
+                            continue
+
+                        response.raise_for_status()
+
+                        if save_html:
+                            html_path = os.path.join(html_directory, f"{query.strip().replace(' ', '_')}_SERP_{device_type}_page_{page}.html")
+                            with open(html_path, "w", encoding="utf-8") as f:
+                                f.write(response.text)
+                            st.write(f"SERP HTML saved at: {html_path}")
+
+                        soup = BeautifulSoup(response.text, "html.parser")
+
+                        # Extract results based on device type
+                        if device_type == "mobile":
+                            page_results, position = extract_mobile_snippet_results(soup, query, domain_to_find)
+                            page_results += extract_organic_results_mobile(soup, query, domain_to_find, position)
+                        else:
+                            page_results, position = extract_results_from_desktop(soup, query, domain_to_find)
+
+                        # Correctly update positions for results
+                        for result in page_results:
+                            result['Position'] = query_positions[query] + 1  # Start position for this page
+                            query_positions[query] += 1  # Increment position for each result
+
+                        results_list.extend(page_results)
+
+                        if stop_on_domain_found and any(result["Domain Found"] == "Yes" for result in page_results):
+                            domain_found_in_query = True
+                            break
+
+                        st.write(f"Google Search URL: {google_url}")
+
+                        sleep(5)
+                        break
+
+                    except requests.exceptions.RequestException as e:
+                        st.error(f"Request error: {e}")
+                        attempts += 1
+                        sleep(5)
 
     if results_list:
         results_df = pd.DataFrame(results_list)
