@@ -228,6 +228,9 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
             start = page * results_per_page
             google_url = f"https://www.{tld}/search?q={encoded_query}&gl={country}&hl={language}&start={start}&pws=0"
 
+            # Inform the user about the selected country for the search
+            st.write(f"Using geolocation for country: {country} ({selected_country})")
+
             attempts = 0
             delay = 5
 
@@ -283,12 +286,12 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
                     attempts += 1
                     sleep(5)
 
-        if results_list:
-            results_df = pd.DataFrame(results_list)
-            results_df = results_df[["Query", "Position", "Domain Found", "Title", "Link", "Snippet Type"]]
-            st.session_state.results_df = results_df
-        else:
-            st.warning("No results were fetched. Please try adjusting your settings or waiting before retrying.")
+    if results_list:
+        results_df = pd.DataFrame(results_list)
+        results_df = results_df[["Query", "Position", "Domain Found", "Title", "Link", "Snippet Type"]]
+        st.session_state.results_df = results_df
+    else:
+        st.warning("No results were fetched. Please try adjusting your settings or waiting before retrying.")
 
     return results_df
 
