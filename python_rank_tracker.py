@@ -229,7 +229,7 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
 
     user_agents = desktop_user_agents if device_type == "desktop" else mobile_user_agents
     viewport = "width=device-width, initial-scale=1" if device_type == "mobile" else "width=1024"
-    
+
     # Dictionary to keep track of position for each query
     query_positions = {query: 0 for query in queries}
 
@@ -267,7 +267,7 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
                             "User-Agent": random.choice(user_agents),
                             "Viewport": viewport
                         }
-                        response = requests.get(google_url, headers=headers)
+                        response = requests.get(google_url, headers=headers)  # Removed proxy usage
 
                         if response.status_code == 429:
                             st.warning("Too many requests. Pausing for a few seconds before retrying.")
