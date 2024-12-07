@@ -233,8 +233,8 @@ def search_google(tld, country, language, results_per_page, queries, domain_to_f
     # Dictionary to keep track of position for each query
     query_positions = {query: 0 for query in queries}
 
-    # Specify location to mimic (e.g., Dubai, UAE)
-    location_to_mimic = "Dubai, UAE"  # Change this to the desired location
+    # Specify location to mimic based on user input
+    location_to_mimic = f"{country}"  # Format as "Country, Language"
     coordinates = get_coordinates(location_to_mimic)
 
     if coordinates:
